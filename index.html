@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de tarefas simples com VueJS</title>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <style type="text/css">
+
+        body {
+            background-color: #fafafa;   
+        }
+
+        input.form-control,
+        .btn-flat,
+        .nav-pills>li.active>a,
+        .nav-pills>li:hover>a {
+            border-radius: 0;
+        }
+
+        input.form-control:focus {
+            box-shadow: none;
+        }
+
+        .bg {
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #263238;
+            color: white;
+        }
+
+        .panel { margin-top: 30px; }
+
+        .tab-content>.tab-pane {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="root">
+
+        <div class="bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1>Uma lista de tarefas simples com VueJS</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Adicionar tarefa</div>
+                        <div class="panel-body">
+                            <form action="javascript: return 0;">
+                                <div class="form-group">
+                                    <label class="control-label">Descrição</label>
+                                    <input type="text" v-model="novaTarefa" class="form-control">
+                                </div>
+                                <button class="btn btn-success btn-flat" @click="adicionarTarefa">
+                                    <i class="glyphicon glyphicon-check"></i> Adicionar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Lista de tarefas</div>
+                        <div class="panel-body">
+                            <ul class="nav nav-pills nav-justified" role="tablist">
+                                <li class="active">
+                                    <a href="#tarefas" data-toggle="tab" >Todas as tarefas</a>
+                                </li>
+                                <li>
+                                    <a href="#incompletas" data-toggle="tab" >Tarefas incompletas</a>
+                                </li>
+                                <li>
+                                    <a href="#completas" data-toggle="tab" >Tarefas completas</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div id="tarefas" class="tab-pane active">
+                                    <ul>
+                                        <li v-for="tarefa in tarefas">
+                                            {{ tarefa.descricao }}
+                                            <input type="checkbox" v-model="tarefa.completa">
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div id="incompletas" class="tab-pane">
+                                    <ul>
+                                        <li v-for="tarefa in tarefasIncompletas" v-text="tarefa.descricao"></li>
+                                    </ul>
+                                </div>
+                                <div id="completas" class="tab-pane">
+                                    <ul>
+                                        <li v-for="tarefa in tarefasCompletas" v-text="tarefa.descricao"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <p>Desenvolvido com <a href="https://vuejs.org/">VueJS</a> e <a href="http://getbootstrap.com/">Bootstrap</a>. Por <a href="https://blog.arturafonso.com.br/">Artur Afonso</a>, <a href="https://github.com/arturafonsoaa">@arturafonsoaa</a>.</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script type="text/javascript" src="https://unpkg.com/vue@2.3.4"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#root',
+            data: {
+                novaTarefa: '',
+                tarefas: []
+            },
+            computed: {
+                tarefasIncompletas() {
+                    return this.tarefas.filter(tarefa => !tarefa.completa);
+                },
+                tarefasCompletas() {
+                    return this.tarefas.filter(tarefa => tarefa.completa);
+                }
+            },
+            methods: {
+                adicionarTarefa() {
+                    this.tarefas.push({
+                        descricao: this.novaTarefa,
+                        completa: false
+                    });
+
+                    this.novaTarefa = '';
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
